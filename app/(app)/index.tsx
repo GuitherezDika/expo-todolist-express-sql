@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { useSession } from '@/ctx'
+import { useSession } from '@/context/ctx'
 
 const index = () => {
     const {signOut} = useSession()

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { useSession } from '@/ctx'
+import { useSession } from '@/context/ctx'
 import { router } from 'expo-router';
 
 const SignIn = () => {

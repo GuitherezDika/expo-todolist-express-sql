@@ -1,4 +1,4 @@
-import { SessionProvider } from '@/ctx';
+import { SessionProvider } from '@/context/ctx';
 import { Slot } from 'expo-router';
 
 export default function Root () {
