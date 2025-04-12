@@ -2,11 +2,45 @@ import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'reac
 import React, { useState } from 'react'
 import colors from './components/global'
 import { router } from 'expo-router';
+import {fetch} from 'expo/fetch'
 
 const SignUp = () => {
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+
+    const createUser = async () => {
+        const url= 'http://192.168.0.106:3000/auth/register';
+        let body = {
+            username,
+            email,
+            password,
+            role: username == 'admin' ? 'admin' : 'user'
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+        });
+
+        const newUser = await response.json();
+        if(response.status == 201){
+            Alert.alert(
+                "Success",
+                `${newUser?.message}`,
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => router.replace('/sign-in'),
+                        style: 'cancel',
+                    },
+                ]
+            )
+        }
+    };
 
     const handleSignUp = () => {
         if (!email || !username || !password) {
@@ -20,11 +54,9 @@ const SignUp = () => {
             Alert.alert('Error', 'Format email tidak valid');
             return;
         }
+        createUser();
+    };
 
-        // fetch api
-        Alert.alert('Sukses', `Akun dengan email ${email} berhasil dibuat!`);
-        router.replace('/sign-in');
-    }
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Buat Akun</Text>

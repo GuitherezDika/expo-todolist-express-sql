@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useSession } from '@/context/ctx'
 import { router } from 'expo-router';
@@ -9,9 +9,38 @@ const SignIn = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const handleSignIn = () => {
-        console.log({ username, password });
+    const onSignInUser = async () => {
+        const url= 'http://192.168.0.106:3000/auth/login';
+        let body = {
+            username,
+            password
+        }
 
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        const newLogin = await response.json();
+
+        if(response.status == 200) {
+            console.log('sukses');
+            signIn(newLogin.accessToken, newLogin.refreshToken);
+            router.replace('/');
+        } else {
+            Alert.alert('Gagal Login', 'Silahkan login ulang!')
+        }
+    }
+
+    const handleSignIn = () => {
+        if(!username || !password) {
+            Alert.alert("Error", "Semua field harus diisi!");
+            return;
+        }
+        onSignInUser();
     }
     return (
         <SafeAreaView style={styles.container}>

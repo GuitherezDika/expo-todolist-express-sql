@@ -1,12 +1,14 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSession } from '@/context/ctx'
 
 const index = () => {
-    const {signOut} = useSession()
+    const {signOut, session, refreshSession} = useSession();
+
     return (
         <View>
-            <Text>index</Text>
+            <Text style={{marginBottom: 14}}>index session = {session}</Text>
+            <Text>index refreshSession = {refreshSession}</Text>
 
             <Text onPress={signOut}>LOGOUT</Text>
         </View>

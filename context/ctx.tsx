@@ -3,14 +3,16 @@ import { useStorageState } from "./useStorageState";
 
 
 const AuthContext = createContext<{
-    signIn: (data: string) => void;
+    signIn: (token: string, refreshToken: string) => void;
     signOut: () => void;
     session?: string | null;
+    refreshSession?: string | null;
     isLoading: boolean; 
 }>({
     signIn: () => null,
     signOut: () => null,
     session: null,
+    refreshSession: null,
     isLoading: false
 });
 
@@ -26,18 +28,19 @@ export function useSession () {
 }
 
 export function SessionProvider({children}: PropsWithChildren) {
-    const [[isLoading, session], setSession] = useStorageState('session')
+    const [[isLoading, session, refreshSession], setSession] = useStorageState('session', 'refreshSession' )
 
     return (
         <AuthContext.Provider
             value={{
-                signIn: (token) => setSession(token),
-                signOut: () => setSession(null),
+                signIn: (token, refreshToken) => setSession(token, refreshToken),
+                signOut: () => setSession(null, null),
                 session,
+                refreshSession,
                 isLoading
             }}
         >
             {children}
         </AuthContext.Provider>
     )
-}
+};
