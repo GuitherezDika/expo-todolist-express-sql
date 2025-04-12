@@ -1,3 +1,10 @@
-import { Stack } from 'expo-router';
+import { SessionProvider } from '@/ctx';
+import { Slot } from 'expo-router';
 
-export default Stack;
+export default function Root () {
+    return (
+        <SessionProvider>
+            <Slot />    
+        </SessionProvider>
+    )
+};
