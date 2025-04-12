@@ -1,7 +1,19 @@
-import { Link, router } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
+import { Link, router, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function Home() {
+
+      const { token } = useAuth();
+      const router = useRouter();
+
+  useEffect(() => {
+    if (token == null) {
+      router.replace('/login');
+    }
+  }, [token]);
+
   return (
     <View style={styles.container}>
       <Text >Todo List:</Text>
