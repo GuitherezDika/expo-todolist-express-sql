@@ -3,31 +3,26 @@ import React, { useState } from 'react'
 import colors from './components/global'
 import { router } from 'expo-router';
 import {fetch} from 'expo/fetch'
+import { signUpUser } from './data/services/authService';
 
 const SignUp = () => {
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const createUser = async () => {
-        const url= 'http://192.168.0.106:3000/auth/register';
         let body = {
             username,
             email,
             password,
             role: username == 'admin' ? 'admin' : 'user'
         };
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body),
-        });
-
+        setLoading(true);
+        const response = await signUpUser(body);        
         const newUser = await response.json();
         if(response.status == 201){
+            setLoading(false);
             Alert.alert(
                 "Success",
                 `${newUser?.message}`,
@@ -85,6 +80,7 @@ const SignUp = () => {
             <TouchableOpacity style={styles.button} onPress={handleSignUp}>
                 <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
+            {loading ? <Text>...Loading</Text> : <></>}
             <TouchableOpacity onPress={() => router.push('/sign-in')}>
                 <Text style={styles.linkText}>Sudah punya akun? Sign In</Text>
             </TouchableOpacity>

@@ -3,11 +3,13 @@ import React, { useState } from 'react'
 import { useSession } from '@/context/ctx'
 import { router } from 'expo-router';
 import colors from './components/global';
+import { signInUser } from './data/services/authService';
 
 const SignIn = () => {
     const { signIn } = useSession();
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onSignInUser = async () => {
         const url= 'http://192.168.0.106:3000/auth/login';
@@ -15,22 +17,16 @@ const SignIn = () => {
             username,
             password
         }
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-
+        setLoading(true);
+        const response = await signInUser(body);
         const newLogin = await response.json();
 
         if(response.status == 200) {
-            console.log('sukses');
+            setLoading(false);
             signIn(newLogin.accessToken, newLogin.refreshToken);
             router.replace('/');
         } else {
+            setLoading(false);
             Alert.alert('Gagal Login', 'Silahkan login ulang!')
         }
     }
@@ -69,13 +65,6 @@ const SignIn = () => {
                     <Text style={styles.linkText}>Belum punya akun? Register di sini</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
-            {/* <Text
-                onPress={() => {
-                    signIn('dika');
-                    router.replace('/');
-                }}>
-                sign-in
-            </Text> */}
         </SafeAreaView>
     )
 }
