@@ -1,11 +1,11 @@
-export interface SignUpInterface {
-    username: string;
-    email: string;
-    password: string;
-    role: string;
+export interface SignUpResInterface {
+    status: number;
+    message: string;
 }
 
-export interface SignInInterface {
-    username: string;
-    password: string;
+export interface SignInResInterface {
+    status: number;
+    message: string;
+    accessToken: string;
+    refreshToken: string;
 }
