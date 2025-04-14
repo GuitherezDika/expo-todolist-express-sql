@@ -4,9 +4,8 @@ import { KeyboardAvoidingView, Platform, SafeAreaView, Text, TextInput, Touchabl
 import colors from "@/app/components/global";
 import { router } from "expo-router";
 
-
 const SignInScreen: React.FC = () => {
-    const { signin } = useAuthViewModel();
+    const { fetchLogin } = useAuthViewModel();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState<boolean>(false);
@@ -14,14 +13,16 @@ const SignInScreen: React.FC = () => {
     const handleSignIn = async () => {
         try {
             setLoading(true)
-            const res = await signin(username, password);
-            if(res.status == 200) {
+            const res = await fetchLogin(username, password);
+            if (res.status == 200) {
                 setLoading(false)
                 router.replace('/');
             }
         } catch (error) {
             setLoading(false)
             console.log('Error = ', error);
+        } finally {
+            setLoading(false);
         }
     }
 

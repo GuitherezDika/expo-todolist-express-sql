@@ -3,14 +3,14 @@ import { useStorageState } from "./useStorageState";
 
 
 const AuthContext = createContext<{
-    signIn: (token: string, refreshToken: string) => void;
-    signOut: () => void;
+    signInState: (token: string, refreshToken: string) => void;
+    signOutState: () => void;
     session?: string | null;
     refreshSession?: string | null;
     isLoading: boolean; 
 }>({
-    signIn: () => null,
-    signOut: () => null,
+    signInState: () => null,
+    signOutState: () => null,
     session: null,
     refreshSession: null,
     isLoading: false
@@ -22,8 +22,7 @@ export function useSession () {
         if (!value) {
             throw new Error (`Use session must be wrapped in <SessionProvider />`)
         } 
-    }
-
+    }                                                                                                                                                                                                                                                                                                                                                             
     return value;
 }
 
@@ -33,8 +32,8 @@ export function SessionProvider({children}: PropsWithChildren) {
     return (
         <AuthContext.Provider
             value={{
-                signIn: (token, refreshToken) => setSession(token, refreshToken),
-                signOut: () => setSession(null, null),
+                signInState: (token, refreshToken) => setSession(token, refreshToken),
+                signOutState: () => setSession(null, null),
                 session,
                 refreshSession,
                 isLoading

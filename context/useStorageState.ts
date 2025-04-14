@@ -2,8 +2,8 @@ import { useCallback, useEffect, useReducer } from "react";
 import * as SecureStore from 'expo-secure-store';
 
 type UseStateHook<T> = [
-    [boolean, T | null, T | null], 
-    (value: T | null, refresh: T | null) => void
+    [boolean, T | null, T | null],  // isLoading, session, refreshSession
+    (value: T | null, refresh: T | null) => void // setSession -> cts.ts
 ];
 
 function useAsyncState<T>(
@@ -12,7 +12,7 @@ function useAsyncState<T>(
     return useReducer(
         (
             state: [boolean, T | null, T | null],
-            action: [T | null, T | null] // function save session, dan refreshSession
+            action: [T | null, T | null]
         ): [boolean, T | null, T | null] => [false, action[0], action[1]],
         initialValue
     ) as UseStateHook<T>
@@ -36,9 +36,9 @@ export function useStorageState(
     // Set
     const setValue = useCallback(
         (sessionValue: string | null, refreshSessionValue: string | null) => {
-            setState([sessionValue, refreshSessionValue]);
             setStorageItemAsync(sessionKey, sessionValue);
             setStorageItemAsync(refreshSessionKey, refreshSessionValue)
+            setState([sessionValue, refreshSessionValue]);
         },
         [sessionKey, refreshSessionKey]
     )
@@ -47,7 +47,7 @@ export function useStorageState(
         const fetchStorage = async () => {
             const sessionData = await SecureStore.getItemAsync(sessionKey);
             const refreshSessionData = await SecureStore.getItemAsync(refreshSessionKey);
-            setState([sessionData, refreshSessionData]);
+            setValue(sessionData, refreshSessionData)
         }
 
         fetchStorage();

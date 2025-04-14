@@ -5,7 +5,7 @@ import colors from '@/app/components/global';
 import { useAuthViewModel } from '../viewmodels/useAuthViewModel';
 
 const SignUpScreen = () => {
-    const { signup } = useAuthViewModel()
+    const { fetchSignup } = useAuthViewModel()
     const [email, setEmail] = useState<string>('');
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -20,7 +20,7 @@ const SignUpScreen = () => {
                 role: username == 'admin' ? 'admin' : 'user'
             };
             setLoading(true);
-            const res = await signup(email, username, password, body.role);
+            const res = await fetchSignup(email, username, password, body.role);
             console.log(res);
             
             if (res.status == 201) {

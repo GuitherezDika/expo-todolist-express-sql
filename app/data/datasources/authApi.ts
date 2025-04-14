@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.73.75:3000';
+const BASE_URL = 'http://192.168.0.115:3000';
 
 export interface AuthSignInResponse {
   status: number;

@@ -1,12 +1,20 @@
 import { SignInResInterface, SignUpResInterface } from "../entities/User";
 import { AuthRepository } from '../repositories/authRepository'
 
-export const signInUseCase = (
+export const signInUseCase = async (
     authRepo: AuthRepository, // define object authentication yang menyimpan banyak function 
+    setStorage: (key: string, value: string) => void,
+    signInState: (session: string, refreshSession: string) => void,
     username: string,
     password: string
 ): Promise<SignInResInterface> => {
-    return authRepo.signin(username, password)
+    const res = await authRepo.signin(username, password);
+    if (res.accessToken || res.refreshToken) {
+        signInState(res.accessToken, res.refreshToken);
+        setStorage('session', res.accessToken);
+        setStorage('refreshSession', res.refreshToken);
+    };
+    return res;
 }
 
 export const signUpUseCase = (
