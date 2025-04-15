@@ -8,7 +8,13 @@ export const useAuthViewModel = () => {// view model ini -> langsung di run pada
     const { signInState } = useSession();
 
     const fetchLogin = async (username: string, password: string): Promise<SignInResInterface> => {
-        return await signInUseCase(AuthRepositoryImpl, setStorageItemAsync, signInState, username, password)
+        return await signInUseCase(
+            AuthRepositoryImpl, // api model and responds
+            setStorageItemAsync, // save file into local storage
+            signInState, // update login context
+            username,
+            password
+        )
     };
 
     const fetchSignup = async (email: string, username: string, password: string, role: string): Promise<SignUpResInterface> => {
