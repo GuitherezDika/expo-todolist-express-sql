@@ -1,6 +1,7 @@
 import { AuthRepositoryImpl } from "@/app/data/repositories/AuthRepositoryImpl"
 import { SignInResInterface, SignUpResInterface } from "@/app/domain/entities/User"
 import { signInUseCase, signUpUseCase } from "@/app/domain/usecases/authUseCase"
+import { AuthSignupParam } from "@/app/globalInterface";
 import { useSession } from "@/context/ctx";
 import { setStorageItemAsync } from "@/context/useStorageState";
 
@@ -17,8 +18,11 @@ export const useAuthViewModel = () => {// view model ini -> langsung di run pada
         )
     };
 
-    const fetchSignup = async (email: string, username: string, password: string, role: string): Promise<SignUpResInterface> => {
-        return await signUpUseCase(AuthRepositoryImpl, email, username, password, role)
+    const fetchSignup = async (signupParam: AuthSignupParam): Promise<SignUpResInterface> => {
+        return await signUpUseCase(
+            AuthRepositoryImpl, 
+            signupParam
+        )
     };
 
     return {

@@ -20,9 +20,8 @@ const SignUpScreen = () => {
                 role: username == 'admin' ? 'admin' : 'user'
             };
             setLoading(true);
-            const res = await fetchSignup(email, username, password, body.role);
-            console.log(res);
-            
+
+            const res = await fetchSignup(body);
             if (res.status == 201) {
                 setLoading(false);
                 Alert.alert(

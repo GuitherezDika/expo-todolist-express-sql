@@ -1,3 +1,4 @@
+import { AuthSignupParam } from "@/app/globalInterface";
 import { SignInResInterface, SignUpResInterface } from "../entities/User";
 import { AuthRepository } from '../repositories/authRepository'
 
@@ -19,10 +20,7 @@ export const signInUseCase = async (
 
 export const signUpUseCase = (
     authRepo: AuthRepository,
-    username: string,
-    email: string,
-    password: string,
-    role: string
+    body: AuthSignupParam
 ): Promise<SignUpResInterface> => {
-    return authRepo.signup(username, email, password, role)
+    return authRepo.signup(body)
 }

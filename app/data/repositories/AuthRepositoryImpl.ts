@@ -1,6 +1,7 @@
 import { SignInResInterface, SignUpResInterface } from "@/app/domain/entities/User";
 import { AuthRepository } from "@/app/domain/repositories/authRepository";
 import { signinApi, signupApi } from "../datasources/authApi";
+import { AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 
 
 export const AuthRepositoryImpl: AuthRepository = {
@@ -13,8 +14,13 @@ export const AuthRepositoryImpl: AuthRepository = {
             refreshToken: res.refreshToken
         }
     },
-    signup: async (email: string, username: string, password: string, role: string): Promise<SignUpResInterface> => {
-        const res = await signupApi(email, username, password, role);
+    signup: async (body: AuthSignupParam): Promise<AuthSignUpResponse> => {
+        const res = await signupApi({
+            username: body.username, 
+            email: body.email, 
+            password: body.password, 
+            role: body.role
+        });
         return {
             status: res.status,
             message: res.message
