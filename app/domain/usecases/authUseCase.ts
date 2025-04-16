@@ -1,4 +1,4 @@
-import { AuthSigninParam, AuthSignupParam, AuthSignUpResponse, AuthSignInResponse } from "@/app/globalInterface";
+import { AuthSigninParam, AuthSignupParam, AuthSignUpResponse, AuthSignInResponse, AuthSignoutParam, AuthSignoutResponse } from "@/app/globalInterface";
 import { AuthRepository } from '../repositories/authRepository'
 
 export const signInUseCase = async (
@@ -21,4 +21,11 @@ export const signUpUseCase = (
     body: AuthSignupParam
 ): Promise<AuthSignUpResponse> => {
     return authRepo.signup(body)
+}
+
+export const signoutUseCase = (
+    authRepo: AuthRepository,
+    body: AuthSignoutParam
+): Promise<AuthSignoutResponse> => {
+    return authRepo.signout(body)
 }

@@ -1,6 +1,6 @@
 import { AuthRepository } from "@/app/domain/repositories/authRepository";
-import { signinApi, signupApi } from "../datasources/authApi";
-import { AuthSigninParam, AuthSignInResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
+import { signinApi, signoutApi, signupApi } from "../datasources/authApi";
+import { AuthSigninParam, AuthSignInResponse, AuthSignoutParam, AuthSignoutResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 
 
 export const AuthRepositoryImpl: AuthRepository = {
@@ -20,6 +20,13 @@ export const AuthRepositoryImpl: AuthRepository = {
             password: body.password, 
             role: body.role
         });
+        return {
+            status: res.status,
+            message: res.message
+        }
+    },
+    signout: async (body: AuthSignoutParam): Promise<AuthSignoutResponse> => {
+        const res = await signoutApi(body);
         return {
             status: res.status,
             message: res.message

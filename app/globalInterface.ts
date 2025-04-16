@@ -11,6 +11,7 @@ interface AuthSignUpResponse {
 }
 
 interface AuthSignoutResponse {
+    status: number;
     message: string;
 }
 
@@ -27,8 +28,8 @@ interface AuthSignupParam {
 }
 
 interface AuthSignoutParam {
-    token: string;
-    refreshToken: string;
+    token?: string | null;
+    refreshToken?: string | null;
 }
 
 export {

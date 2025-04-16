@@ -1,4 +1,4 @@
-import { AuthSigninParam, AuthSignInResponse, AuthSignoutResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
+import { AuthSigninParam, AuthSignInResponse, AuthSignoutParam, AuthSignoutResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 
 const BASE_URL = 'http://10.7.129.233:3000';
 
@@ -27,15 +27,17 @@ export const signupApi = async(signupParam: AuthSignupParam): Promise<AuthSignUp
   return {...data, status: res.status}
 }
 
-export const signoutApi = async(token: string, refreshToken: string): Promise<AuthSignoutResponse> => {
+export const signoutApi = async(body: AuthSignoutParam): Promise<AuthSignoutResponse> => {
   const res  = await fetch(`${BASE_URL}/auth/logout`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${body.token}`,
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ refreshToken })
+    body: JSON.stringify({
+      refreshToken: body.refreshToken
+    })
   })
   const data = await res.json();
-  return data;
+  return {...data, status: res.status}
 }
