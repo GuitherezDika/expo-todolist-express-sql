@@ -1,12 +1,12 @@
-import { AuthSignInResponse, AuthSignoutResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
+import { AuthSigninParam, AuthSignInResponse, AuthSignoutResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 
 const BASE_URL = 'http://10.7.129.233:3000';
 
-export const signinApi = async(username: string, password: string): Promise<AuthSignInResponse> => {
+export const signinApi = async(body: AuthSigninParam): Promise<AuthSignInResponse> => {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({username, password}),
+    body: JSON.stringify({username: body.username, password: body.password}),
   });
   const data = await res.json();
   return {...data, status: res.status}

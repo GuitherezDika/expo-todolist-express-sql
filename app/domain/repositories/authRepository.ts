@@ -1,7 +1,5 @@
-import { AuthSignupParam } from "@/app/globalInterface";
-import { SignInResInterface, SignUpResInterface } from "../entities/User";
-
+import { AuthSigninParam, AuthSignInResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 export interface AuthRepository {
-    signin(username: string, password: string): Promise<SignInResInterface>;
-    signup(body: AuthSignupParam): Promise<SignUpResInterface>;
+    signin(body: AuthSigninParam): Promise<AuthSignInResponse>;
+    signup(body: AuthSignupParam): Promise<AuthSignUpResponse>;
 }

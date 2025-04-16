@@ -12,8 +12,9 @@ const SignInScreen: React.FC = () => {
 
     const handleSignIn = async () => {
         try {
-            setLoading(true)
-            const res = await fetchLogin(username, password);
+            setLoading(true);
+            let body = {username, password}
+            const res = await fetchLogin(body);
             if (res.status == 200) {
                 setLoading(false)
                 router.replace('/');

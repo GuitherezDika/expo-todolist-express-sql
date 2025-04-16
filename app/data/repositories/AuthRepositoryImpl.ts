@@ -1,12 +1,11 @@
-import { SignInResInterface, SignUpResInterface } from "@/app/domain/entities/User";
 import { AuthRepository } from "@/app/domain/repositories/authRepository";
 import { signinApi, signupApi } from "../datasources/authApi";
-import { AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
+import { AuthSigninParam, AuthSignInResponse, AuthSignupParam, AuthSignUpResponse } from "@/app/globalInterface";
 
 
 export const AuthRepositoryImpl: AuthRepository = {
-    signin: async (username: string, password: string): Promise<SignInResInterface> => {
-        const res = await signinApi(username, password);
+    signin: async (body: AuthSigninParam): Promise<AuthSignInResponse> => {
+        const res = await signinApi(body);
         return {
             status: res.status,
             message: res.message,
