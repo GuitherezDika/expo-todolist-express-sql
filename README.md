@@ -1,50 +1,110 @@
-# Welcome to your Expo app 👋
+app/
+├── _layout.tsx                 # Root layout (cek token & redirect)
+├── signin.tsx                  # Sign In screen
+├── signup.tsx                  # Sign Up screen
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+├── (tabs)/                     # Authenticated area
+│   ├── _layout.tsx             # Tab layout
+│   ├── home.tsx                # Home Tab
+│   ├── feed.tsx                # Feed Tab
+│   ├── profile.tsx             # Profile Tab
 
-## Get started
+├── detail/
+│   └── [id].tsx                # Detail screen (navigasi dinamis)
 
-1. Install dependencies
+======================================
+app/_layout.tsx
 
-   ```bash
-   npm install
-   ```
+import { Slot, useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import * as SecureStore from 'expo-secure-store';
 
-2. Start the app
+export default function RootLayout() {
+  const router = useRouter();
 
-   ```bash
-    npx expo start
-   ```
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = await SecureStore.getItemAsync('access_token');
+      if (!token) {
+        router.replace('/signin');
+      } else {
+        router.replace('/(tabs)/home');
+      }
+    };
+    checkAuth();
+  }, []);
 
-In the output, you'll find options to open the app in a
+  return <Slot />;
+}
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+=====================================
+ app/signin.tsx dan signup.tsx
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+ // app/signin.tsx
+import SignInScreen from '../presentation/screens/SignInScreen';
+export default SignInScreen;
 
-## Get a fresh project
 
-When you're ready, run:
+// app/signup.tsx
+import SignUpScreen from '../presentation/screens/SignUpScreen';
+export default SignUpScreen;
 
-```bash
-npm run reset-project
-```
+===============================
+app/(tabs)/_layout.tsx
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+import { Tabs } from 'expo-router';
 
-## Learn more
+export default function TabsLayout() {
+  return (
+    <Tabs>
+      <Tabs.Screen name="home" options={{ title: 'Home' }} />
+      <Tabs.Screen name="feed" options={{ title: 'Feed' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+    </Tabs>
+  );
+}
 
-To learn more about developing your project with Expo, look at the following resources:
+================================
+app/(tabs)/home.tsx, feed.tsx, profile.tsx
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-## Join the community
+// app/(tabs)/home.tsx
+import { View, Text, Button } from 'react-native';
+import { useRouter } from 'expo-router';
 
-Join our community of developers creating universal apps.
+export default function HomeTab() {
+  const router = useRouter();
+  return (
+    <View>
+      <Text>Home Screen</Text>
+      <Button title="Go to Detail" onPress={() => router.push('/detail/42')} />
+    </View>
+  );
+}
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+===================================
+app/detail/[id].tsx
+
+// app/detail/[id].tsx
+import { useLocalSearchParams } from 'expo-router';
+import { View, Text } from 'react-native';
+
+export default function DetailScreen() {
+  const { id } = useLocalSearchParams();
+
+  return (
+    <View>
+      <Text>Detail for item ID: {id}</Text>
+    </View>
+  );
+}
+
+
+=====================================
+navigasi ke tab
+router.replace('/(tabs)/feed');
+
+navigasi ke detail dari mana aja
+router.push('/detail/123');
+
+=====================================
